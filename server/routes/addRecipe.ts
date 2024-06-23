@@ -5,11 +5,19 @@ import {v4 as uuid} from 'uuid';
 import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
 import ollama from "ollama";
 export const extractIngredients = async (text: string): Promise<string[]> => {
-    const response = await ollama.chat({
-        model: 'llama3',
-        messages: [{ role: 'system', content: `extract ingredients from given text ${text} reply with only the extracted ingredients make sure the ingredients are comma separate. Do not print anything else` }],
-    });
-    return response.message.content.split(',');
+    try {
+        const response = await ollama.chat({
+            model: 'llama3',
+            messages: [{
+                role: 'system',
+                content: `extract ingredients from given text ${text} reply with only the extracted ingredients make sure the ingredients are comma separate. Do not print anything else`
+            }],
+        });
+        return response.message.content.split(',');
+    }
+    catch (e) {
+        console.error(e);
+    }
 }
 
 const RecipeSchema = z.object({
@@ -65,6 +73,7 @@ const generateRecipe = async () => {
     const url = lastAddedRecipe.url;
     const text = await getTextFromHtml(url)
     const ingredients = await extractIngredients(text);
+    console.log("Ingredients", ingredients)
     if(Array.isArray(ingredients)) {
         const removeSymbols = ingredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length > 0);
 
