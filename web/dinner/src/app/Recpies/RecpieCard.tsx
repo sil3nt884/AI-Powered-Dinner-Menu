@@ -8,6 +8,7 @@ import RecipeModal from "@/app/Recpies/RecipeModal";
 export default function RecipeCard(recipe:  RecipeData) {
 
     const [isModalOpen, setModalOpen] = useState(false);
+    const addDinnerEndpoint = process.env.ADD_DINNER_ENDPOINT ?? '';
 
     const handleCardClick = () => {
         setModalOpen(!isModalOpen);
@@ -17,7 +18,7 @@ export default function RecipeCard(recipe:  RecipeData) {
         const body = JSON.stringify({
             recipe_id: recipe.id
         })
-        await fetch('http://localhost:3000/addDinner', {
+        await fetch(addDinnerEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

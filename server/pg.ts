@@ -6,7 +6,10 @@ export const client = new Client({
     database: 'menus',
     password: process.env.PGPASSWORD ?? '',
     port: parseInt(process.env.PGPORT ?? ''),
-    ssl: process.env.PGSSLMODE === 'true' ?? false
+    ssl:process.env.PGSSLMODE === 'true' ? {
+        rejectUnauthorized: false
+
+    } : false
 });
 
 export const connect = async () => {
