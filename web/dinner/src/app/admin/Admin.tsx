@@ -13,6 +13,7 @@ export default function Admin() {
     const addRecipeEndpoint = process.env.ADD_RECIPE_ENDPOINT ?? ''
     const addIngredientEndpoint = process.env.ADD_INGREDIENT_ENDPOINT ?? ''
 
+
     const addRecipe = async () => {
         setIsAddingRecipe(true);
         try {
