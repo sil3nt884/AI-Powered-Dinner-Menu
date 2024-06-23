@@ -2,9 +2,15 @@ import {client} from '../pg';
 import {Request, Response} from "express";
 import z from 'zod';
 import {v4 as uuid} from 'uuid';
-import { extractIngredients } from "../IngredientsExtract";
 import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
-
+import ollama from "ollama";
+export const extractIngredients = async (text: string): Promise<string[]> => {
+    const response = await ollama.chat({
+        model: 'llama3',
+        messages: [{ role: 'system', content: `extract ingredients from given text ${text} reply with only the extracted ingredients make sure the ingredients are comma separate. Do not print anything else` }],
+    });
+    return response.message.content.split(',');
+}
 
 const RecipeSchema = z.object({
     id: z.string().optional(),
