@@ -4,9 +4,24 @@ import {client} from "./pg";
 
 export const parseHtml = (html: string): string => {
     const $ = load(html);
-     $('script, style', 'img', 'link', 'meta', 'head', 'a').remove();
-    const text = $('body').text();
-    return text.replace(/\s+/g, ' ').trim();
+
+    // Remove unwanted tags
+    $('script, style, img, link, meta, head, a').remove();
+
+    $('*').contents().each(function() {
+        if (this.nodeType === 8) {
+            $(this).remove();
+        }
+    });
+    let text = $('body').text();
+    text = text.replace(/"[^"]*":\s*(\{[^}]*\}|\[[^\]]*\]|\d+|null|true|false|"[^"]*")/g, '');
+    text = text.replace(/style=["'][^"']*["']/g, '');
+    text = text.replace(/\s+/g, ' ').trim();
+    text = text.replace(/[^\w\s.,?!]/g, ' ');
+    text = text.replace(/\s+/g, ' ').trim();
+
+    console.log(text);
+    return text;
 };
 
 export const fetchHtml = async (url: string): Promise<string> => {

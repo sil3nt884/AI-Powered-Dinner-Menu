@@ -5,8 +5,9 @@ type Dinner = {
 }
 export default  async  function DinnersList() {
 
+    const endpoint = process.env.DINNERS_ENDPOINT ?? '';
 
-    const data: Dinner[]  = await (await fetch('http://localhost:3000/dinners', { cache: 'no-store' })).json();
+    const data: Dinner[]  = await (await fetch(endpoint, { cache: 'no-store' })).json();
 
     if(!data) {
         return <h1> No Dinners </h1>

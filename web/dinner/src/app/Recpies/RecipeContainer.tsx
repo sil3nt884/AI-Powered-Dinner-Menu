@@ -3,8 +3,9 @@ import {RecipeData} from "../../../../../server/routes/getRecipes";
 import './Recpies.css'
 
 export default async function RecipeContainer() {
+    const getRecipesEndpoint = process.env.GET_RECIPES_ENDPOINT ?? ''
     const fetchRecipe = async () => {
-        const res = await fetch('http://localhost:3000/getRecipes', { cache: 'no-store' })
+        const res = await fetch(getRecipesEndpoint, { cache: 'no-store' })
         return await res.json()
 
     }

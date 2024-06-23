@@ -1,11 +1,11 @@
 import { Client } from 'pg';
 
 export const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
+    user:  process.env.PGUSER ?? '',
+    host: process.env.PGHOST ?? '',
     database: 'menus',
-    password: 'password',
-    port: 5433,
+    password: process.env.PGPASSWORD ?? '',
+    port: parseInt(process.env.PGPORT ?? ''),
 });
 
 export const connect = async () => {

@@ -17,7 +17,6 @@ export default function RecipeCard(recipe:  RecipeData) {
         const body = JSON.stringify({
             recipe_id: recipe.id
         })
-        console.log(body)
         await fetch('http://localhost:3000/addDinner', {
             method: 'POST',
             headers: {

@@ -10,11 +10,13 @@ export default function Admin() {
 
     const [isAddingRecipe, setIsAddingRecipe] = useState(false);
     const [isAddingIngredient, setIsAddingIngredient] = useState(false);
+    const addRecipeEndpoint = process.env.ADD_RECIPE_ENDPOINT ?? ''
+    const addIngredientEndpoint = process.env.ADD_INGREDIENT_ENDPOINT ?? ''
 
     const addRecipe = async () => {
         setIsAddingRecipe(true);
         try {
-            const response = await fetch('http://localhost:3000/addRecipes', {
+            const response = await fetch(addRecipeEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,7 +39,7 @@ export default function Admin() {
     const addIngredient = async () => {
         setIsAddingIngredient(true);
         try {
-            const response = await fetch('http://localhost:3000/addIngredient', {
+            const response = await fetch(addIngredientEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
