@@ -9,6 +9,8 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
     ]
     const forwardedIpsStr = req.header('x-forwarded-for');
     const remoteAddress = req.socket.remoteAddress;
+    console.log(forwardedIpsStr);
+    console.log(remoteAddress);
 
     if (allowedIps.includes(remoteAddress) || allowedIps.includes(forwardedIpsStr)) {
         return next();
