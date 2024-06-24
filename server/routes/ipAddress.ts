@@ -7,8 +7,10 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
         '139.59.168.154',
         '209.38.168.236'
     ]
+    const forwardedIpsStr = req.header('x-forwarded-for');
+    const remoteAddress = req.socket.remoteAddress;
 
-    if (allowedIps.includes(req.ip)) {
+    if (allowedIps.includes(remoteAddress) || allowedIps.includes(forwardedIpsStr)) {
         return next();
     }
    res.status(403).send('Forbidden');
