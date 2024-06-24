@@ -77,6 +77,6 @@ export const getRecipes = async (req: Request, res: Response) => {
         res.status(200).send(recipesWithIngredients);
     } catch (e) {
         console.error(e);
-        res.status(500).send("Error getting recipes");
+        res.status(500).send({ message: "Error getting recipes" });
     }
 }

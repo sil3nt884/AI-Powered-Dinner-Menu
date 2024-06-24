@@ -19,10 +19,10 @@ export const addIngredient = async (req: Request, res: Response): Promise<void> 
         const sql = `INSERT INTO ingredients (id, name)
                      VALUES ($1, $2)`;
         await client.query(sql, [id, name]);
-        res.status(200).send("Ingredient added");
+        res.status(200).send({ message: "Ingredient added"});
     }
     catch(e){
         console.error(e);
-        res.status(500).send("Error adding ingredients");
+        res.status(500).send( { message: "Error adding ingredients" });
     }
 }

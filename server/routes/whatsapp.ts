@@ -15,7 +15,7 @@ export const whatsapp = async (req: Request, resp: Response )=> {
     }
     catch(e) {
         console.error(e);
-        resp.status(500).send("Error getting dinners");
+        resp.status(500).send({ message: "Error getting dinners" });
     }
 
 }

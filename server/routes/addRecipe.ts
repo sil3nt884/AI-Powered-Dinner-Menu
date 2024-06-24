@@ -43,10 +43,10 @@ export const handleAddRecipe = async (req: Request, res: Response) => {
         const recipe = RecipeSchema.parse(recipeBody);
         await addRecipe(recipe);
         await generateRecipe();
-        res.status(200).send("Recipe added");
+        res.status(200).send({ message: "Recipe added"});
     } catch (e) {
         console.error(e);
-        res.status(500).send("Error adding recipe");
+        res.status(500).send({ message: "Error adding recipe" });
     }
 }
 

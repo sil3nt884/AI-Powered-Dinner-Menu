@@ -20,10 +20,10 @@ export const addDinner = async (req: Request, res: Response): Promise<void> => {
                          VALUES ($1, $2, $3)`;
             await client.query(sql, [id, recipe_id, date]);
 
-            res.status(200).send("Dinner added");
+            res.status(200).send({ message : "Dinner added" });
         } catch (e) {
             console.error(e);
-            res.status(500).send("Error adding dinner");
+            res.status(500).send({message: "Error adding dinner" });
         }
 
 
