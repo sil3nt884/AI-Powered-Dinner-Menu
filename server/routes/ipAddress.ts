@@ -5,7 +5,8 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
         '::1',
         '127.0.0.1',
         '139.59.168.154',
-        '209.38.168.236'
+        '209.38.168.236',
+        '10.16.0.2'
     ]
     const forwardedIpsStr = req.header('x-forwarded-for')?.replace(/[^0-9.]/g, '');
     const remoteAddress = req.socket.remoteAddress?.replace(/[^0-9.]/g, '');
