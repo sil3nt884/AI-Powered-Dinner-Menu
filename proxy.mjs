@@ -19,6 +19,7 @@ proxy.register('homeluu.ddns.net', 'http://localhost:3000', {
     ssl: true,
     letsencrypt: {
         email: 'sil3nt994@gmail.com', // Domain owner/admin email
+        production: true // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
     }
 
 });
@@ -27,6 +28,7 @@ proxy.register('homeluu.ddns.net', 'http://localhost:3001', {
     ssl: true,
     letsencrypt: {
         email: 'sil3nt994@gmail.com', // Domain owner/admin email
+        production: true
     },
     path: ['/addDinner', '/addIngredient', '/dinners', '/getRecipes', '/addRecipes']
 });
