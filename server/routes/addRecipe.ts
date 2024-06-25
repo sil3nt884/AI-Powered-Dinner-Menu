@@ -6,14 +6,14 @@ import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
 import ollama from "ollama";
 export const extractIngredients = async (text: string): Promise<string[]> => {
     try {
-        const response = await ollama.chat({
+        const response = await ollama.generate({
             model: 'llama3',
-            messages: [{
-                role: 'system',
-                content: `extract ingredients from given text ${text} reply with only the extracted ingredients make sure the ingredients are comma separate. Do not print anything else`
-            }],
+            format: 'json',
+            prompt: `extract ingredients from given text ${text} reply with only the extracted ingredients response should be a JSON`,
         });
-        return response.message.content.split(',');
+        const jsonResponse = JSON.parse(response.response)
+        const ingredientsKey = Object.keys(jsonResponse)[0]
+        return jsonResponse[ingredientsKey];
     }
     catch (e) {
         console.error(e);

@@ -9,8 +9,6 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
     "removeComments": true,
 

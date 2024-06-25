@@ -14,6 +14,12 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
         next();
         return;
     }
+
+    if(req.socket.remoteAddress.includes('127.0.0.1') || req.socket.remoteAddress.includes('::1')){
+        next();
+        return;
+    }
+
     console.log("Forbidden",forwardedIpsStr )
    res.status(403).send('Forbidden');
 }
