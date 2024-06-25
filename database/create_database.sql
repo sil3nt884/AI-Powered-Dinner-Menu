@@ -33,3 +33,9 @@ FROM weekly_dinner wr
          JOIN recipes r ON r.id = wr.recipe_id
 WHERE DATE(wr.date) >= (date_trunc('week', current_date) - INTERVAL '1 day')
   AND DATE(wr.date) < (date_trunc('week', current_date) + INTERVAL '7 days');
+
+
+CREATE INDEX idx_recipes_name ON recipes(name);
+CREATE INDEX idx_generated_recipes_recipe_id ON generated_recipes(recipe_id);
+CREATE INDEX idx_weekly_dinner_date ON weekly_dinner(date);
+CREATE INDEX idx_weekly_dinner_recipe_id ON weekly_dinner(recipe_id);
