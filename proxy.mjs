@@ -17,11 +17,11 @@ proxy.register('homeluu.ddns.net', 'http://localhost:3001', {
     ssl: true,
 });
 
-proxy.register('homeluu.ddns.net/addDinner', 'http://localhost:3000');
-proxy.register('homeluu.ddns.net/addIngredient', 'http://localhost:3000');
-proxy.register('homeluu.ddns.net/dinners', 'http://localhost:3000');
-proxy.register('homeluu.ddns.net/getRecipes', 'http://localhost:3000');
-proxy.register('homeluu.ddns.net/addRecipes', 'http://localhost:3000');
+// proxy.register('homeluu.ddns.net/addDinner', 'http://localhost:3000');
+// proxy.register('homeluu.ddns.net/addIngredient', 'http://localhost:3000');
+// proxy.register('homeluu.ddns.net/dinners', 'http://localhost:3000');
+// proxy.register('homeluu.ddns.net/getRecipes', 'http://localhost:3000');
+// proxy.register('homeluu.ddns.net/addRecipes', 'http://localhost:3000');
 
 
 
