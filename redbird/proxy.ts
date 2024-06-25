@@ -1,4 +1,4 @@
-import proxy from 'redbird';
+import redbird from 'redbird';
 
 const proxy = redbird({
     port: 80, // Listen on port 80 for HTTP traffic
