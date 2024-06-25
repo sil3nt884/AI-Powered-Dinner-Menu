@@ -8,12 +8,12 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
         '209.38.168.236',
         '10.16.0.2'
     ]
-    const forwardedIpsStr = req.header('x-forwarded-for')?.replace(/[^0-9.]/g, '');
-    const remoteAddress = req.socket.remoteAddress?.replace(/[^0-9.]/g, '');
-    console.log("request id", forwardedIpsStr, remoteAddress)
-    if (allowedIps.includes(forwardedIpsStr) || allowedIps.includes(remoteAddress)) {
+    const forwardedIpsStr = req.header('X-Real-IP')?.replace(/[^0-9.]/g, '');
+    console.log("request id", forwardedIpsStr)
+    if (allowedIps.includes(forwardedIpsStr)) {
         next();
         return;
     }
+    console.log("Forbidden",forwardedIpsStr )
    res.status(403).send('Forbidden');
 }
