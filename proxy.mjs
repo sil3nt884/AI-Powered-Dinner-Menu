@@ -1,4 +1,4 @@
-const redbird = require('redbird');
+import redbird from 'redbird';
 
 // Create a Redbird instance with SSL support
 const proxy = redbird({
