@@ -24,3 +24,12 @@ CREATE TABLE WEEKLY_DINNER (
     DATE DATE NOT NULL,
     RECIPE_ID uuid REFERENCES RECIPES(ID) NOT NULL
 );
+
+
+
+CREATE VIEW weekly_dinner_view AS
+SELECT DISTINCT ON (DATE(wr.date), r.id) wr.recipe_id, r.name, r.url
+FROM weekly_dinner wr
+         JOIN recipes r ON r.id = wr.recipe_id
+WHERE DATE(wr.date) >= (date_trunc('week', current_date) - INTERVAL '1 day')
+  AND DATE(wr.date) < (date_trunc('week', current_date) + INTERVAL '7 days');
