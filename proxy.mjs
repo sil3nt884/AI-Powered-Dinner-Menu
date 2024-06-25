@@ -13,11 +13,11 @@ const proxy = redbird({
 
 
 // Register routes to forward traffic to your desired ports
-proxy.register('homeluu.ddns.net', 'http://localhost:3000', {
+proxy.register('homeluu.ddns.net', 'http://localhost:3001', {
     ssl: true,
 });
 
-proxy.register('homeluu.ddns.net', 'http://localhost:3001', {
+proxy.register('homeluu.ddns.net', 'http://localhost:3000', {
     ssl: true,
     path: ['/addDinner', '/addIngredient', '/dinners', '/getRecipes', '/addRecipes']
 });
