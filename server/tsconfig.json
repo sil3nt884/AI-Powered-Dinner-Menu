@@ -4,6 +4,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "outDir": "dist",
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
