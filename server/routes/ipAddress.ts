@@ -43,7 +43,9 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
     const forwardedIpsStr = req.header('X-Real-IP')?.replace(/[^0-9.]/g, '');
     console.log("request id", forwardedIpsStr)
     if(forwardedIpsStr && !allowedIps.includes(forwardedIpsStr)){
+        console.log("request id blocked", forwardedIpsStr)
         return res.status(403).send('Forbidden');
+
     }
     else {
         if(req.socket.remoteAddress?.includes('127.0.0.1') || req.socket.remoteAddress?.includes('::1')){
