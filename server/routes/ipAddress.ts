@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as jose from 'jose'
 const SECERT_HEADER = process.env.SECRET_HEADER ?? undefined
 const jwtKey = process.env.JWT_KEY ?? undefined
+import {  createSecretKey } from 'crypto';
 export const allowedIpAddress = () => async (req: Request, res: Response, next: () => void) => {
 
     const clientCertEncoded = req.header('jwt');
@@ -15,7 +16,7 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
         return;
     }
 
-    const secret = jose.base64url.decode(jwtKey)
+    const secret =  createSecretKey(Buffer.from(jwtKey, 'utf8'));
     const jwt = await jose.jwtDecrypt(clientCertEncoded, secret, {
         issuer: 'homeluu',
     })
