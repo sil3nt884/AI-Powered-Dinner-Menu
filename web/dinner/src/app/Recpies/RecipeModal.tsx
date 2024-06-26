@@ -41,7 +41,16 @@ export default function RecipeModal({recipe, isOpen}:  {recipe: RecipeData,  isO
                                     const queryParam = params.get('query');
                                     return (
                                         <li key={index} className="underline text-blue-500">
-                                            <a onClick= {(e) =>  e.stopPropagation()} target={'_blank'} href={query}>{queryParam}</a>
+                                            <p style={
+                                                {
+                                                    cursor: 'pointer',
+                                                    color: 'blue'
+                                                }
+                                            } onClick={
+                                                () => {
+                                                    window.open(query, '_blank')
+                                                }
+                                            }>{queryParam}</p>
                                         </li>
                                     )}
                                 )}
