@@ -1,3 +1,4 @@
 /.idea/
 !/.idea/
 !/server/.env
+.idea/
