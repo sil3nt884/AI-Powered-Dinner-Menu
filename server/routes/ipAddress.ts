@@ -13,6 +13,7 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
         return;
     }
 
+
     const allowedIps = [
         '88.97.10.194',
         '::1',
