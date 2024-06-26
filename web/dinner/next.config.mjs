@@ -8,7 +8,7 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     env: {
-        ADD_RECIPE_ENDPOINT: 'http://localhost:3000/addRecipes',
+        ADD_RECIPE_ENDPOINT: 'https://homeluu.ddns.net/addRecipes',
         ADD_INGREDIENT_ENDPOINT: 'https://homeluu.ddns.net/addIngredient',
         DINNERS_ENDPOINT:  'https://homeluu.ddns.net/dinners',
         GET_RECIPES_ENDPOINT: 'https://homeluu.ddns.net/getRecipes',
