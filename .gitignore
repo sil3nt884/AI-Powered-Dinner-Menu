@@ -1,5 +1,4 @@
 /.idea/
-!/.idea/
-!/server/.env
+/server/.env
 .idea/
-!/AI-Powered-Dinner-Menu.iml
+AI-Powered-Dinner-Menu.iml
