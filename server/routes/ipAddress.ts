@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
+
+const SECERT_HEADER = process.env.SECRET_HEADER ?? undefined
 export const allowedIpAddress = () => (req: Request, res: Response, next: () => void) => {
 
-    // if X-REAL-IP is not present in the header then return forbidden
-    if (!req.header('X-Real-IP')) {
+    if(!SECERT_HEADER){
+        res.status(403).send('Forbidden');
+        return;
+    }
+
+    if (!req.header(SECERT_HEADER)) {
         res.status(403).send('Forbidden');
         return;
     }
