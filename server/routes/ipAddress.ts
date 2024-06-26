@@ -8,7 +8,6 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
     const clientCertEncoded = req.header('jwt');
     if(!clientCertEncoded){
         return res.status(403).send('Forbidden');
-
     }
     if(!jwtKey){
         return res.status(403).send('Forbidden');
@@ -36,7 +35,6 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
         '88.97.10.194',
         '::1',
         '127.0.0.1',
-        '139.59.168.154',
         '10.16.0.2'
     ]
     const forwardedIpsStr = req.header('X-Real-IP')?.replace(/[^0-9.]/g, '');
