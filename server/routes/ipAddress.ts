@@ -7,13 +7,11 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
 
     const clientCertEncoded = req.header('jwt');
     if(!clientCertEncoded){
-        res.status(403).send('Forbidden');
-        return;
+        return res.status(403).send('Forbidden');
 
     }
     if(!jwtKey){
-        res.status(403).send('Forbidden');
-        return;
+        return res.status(403).send('Forbidden');
     }
 
     const secret =  createSecretKey(Buffer.from(jwtKey, 'utf8'));
@@ -22,18 +20,15 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
     })
 
     if(!jwt){
-        res.status(403).send('Forbidden');
-        return;
+        return res.status(403).send('Forbidden');
     }
 
     if(!SECERT_HEADER){
-        res.status(403).send('Forbidden');
-        return;
+        return res.status(403).send('Forbidden');
     }
 
-    if (!req.header(SECERT_HEADER)) {
-        res.status(403).send('Forbidden');
-        return;
+    if ( SECERT_HEADER && !req.header(SECERT_HEADER)) {
+        return res.status(403).send('Forbidden');
     }
 
 
@@ -47,16 +42,13 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
     ]
     const forwardedIpsStr = req.header('X-Real-IP')?.replace(/[^0-9.]/g, '');
     console.log("request id", forwardedIpsStr)
-    if ( forwardedIpsStr && allowedIps.includes(forwardedIpsStr)) {
-        next();
-        return;
+    if(forwardedIpsStr && !allowedIps.includes(forwardedIpsStr)){
+        return res.status(403).send('Forbidden');
     }
-
-    if(req.socket.remoteAddress?.includes('127.0.0.1') || req.socket.remoteAddress?.includes('::1')){
-        next();
-        return;
+    else {
+        if(req.socket.remoteAddress?.includes('127.0.0.1') || req.socket.remoteAddress?.includes('::1')){
+            return next();
+        }
+        return next()
     }
-
-    console.log("Forbidden",forwardedIpsStr )
-   res.status(403).send('Forbidden');
 }
