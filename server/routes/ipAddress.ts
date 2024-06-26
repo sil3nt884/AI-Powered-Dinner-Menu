@@ -21,8 +21,6 @@ export const allowedIpAddress = () => async (req: Request, res: Response, next: 
         issuer: 'homeluu',
     })
 
-    console.log("jwt", jwt)
-
     if(!jwt){
         res.status(403).send('Forbidden');
         return;
