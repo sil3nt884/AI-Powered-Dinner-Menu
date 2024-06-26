@@ -3,8 +3,9 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,
-    "outDir": "dist",
+    "noEmit": false,
+    "outDir": "./dist",
+       "rootDir": ".",
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -15,7 +16,6 @@
     "incremental": true
 
   },
-  "exclude": ["node_modules", "../web/dinner/*"],
-    "include": [ "**/*.ts"],
+  "exclude": ["node_modules", "../web/dinner/**", "dist"],
 
 }
