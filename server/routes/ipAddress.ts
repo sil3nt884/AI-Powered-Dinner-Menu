@@ -1,7 +1,31 @@
 import { Request, Response } from "express";
-
+import * as jose from 'jose'
 const SECERT_HEADER = process.env.SECRET_HEADER ?? undefined
-export const allowedIpAddress = () => (req: Request, res: Response, next: () => void) => {
+const jwtKey = process.env.JWT_KEY ?? undefined
+export const allowedIpAddress = () => async (req: Request, res: Response, next: () => void) => {
+
+    const clientCertEncoded = req.header('jwt');
+    if(!clientCertEncoded){
+        res.status(403).send('Forbidden');
+        return;
+
+    }
+    if(!jwtKey){
+        res.status(403).send('Forbidden');
+        return;
+    }
+
+    const secret = jose.base64url.decode(jwtKey)
+    const jwt = await jose.jwtDecrypt(clientCertEncoded, secret, {
+        issuer: 'homeluu',
+    })
+
+    if(!jwt){
+        res.status(403).send('Forbidden');
+        return;
+    }
+
+
 
     if(!SECERT_HEADER){
         res.status(403).send('Forbidden');
@@ -24,12 +48,12 @@ export const allowedIpAddress = () => (req: Request, res: Response, next: () => 
     ]
     const forwardedIpsStr = req.header('X-Real-IP')?.replace(/[^0-9.]/g, '');
     console.log("request id", forwardedIpsStr)
-    if (allowedIps.includes(forwardedIpsStr)) {
+    if ( forwardedIpsStr && allowedIps.includes(forwardedIpsStr)) {
         next();
         return;
     }
 
-    if(req.socket.remoteAddress.includes('127.0.0.1') || req.socket.remoteAddress.includes('::1')){
+    if(req.socket.remoteAddress?.includes('127.0.0.1') || req.socket.remoteAddress?.includes('::1')){
         next();
         return;
     }

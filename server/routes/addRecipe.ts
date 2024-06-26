@@ -4,7 +4,7 @@ import z from 'zod';
 import {v4 as uuid} from 'uuid';
 import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
 import ollama from "ollama";
-export const extractIngredients = async (text: string): Promise<string[]> => {
+export const extractIngredients = async (text: string): Promise<string[] | undefined> => {
     try {
         const response = await ollama.generate({
             model: 'llama3',
@@ -73,9 +73,8 @@ const generateRecipe = async () => {
     const url = lastAddedRecipe.url;
     const text = await getTextFromHtml(url)
     const ingredients = await extractIngredients(text);
-    console.log("Ingredients", ingredients)
     if(Array.isArray(ingredients)) {
-        const removeSymbols = ingredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length > 0);
+        const removeSymbols = ingredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length ?? 0 > 0);
 
         const ingredientsListQuery = await client.query('SELECT * FROM ingredients');
         const ingredientsList = ingredientsListQuery.rows;
@@ -83,7 +82,7 @@ const generateRecipe = async () => {
             return new RegExp(ingredient.name, 'gi');
         });
         const cleanedIngredients = await cleanExtractedIngredients(removeSymbols, cleanedIngredientsRegexp);
-        const removeSymbolsIng = cleanedIngredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length > 0);
+        const removeSymbolsIng = cleanedIngredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length ?? 0 > 0);
         const uniqueIngredients = [...new Set(removeSymbolsIng)];
         const bestEffortExtractIngredientsList = await bestEffortExtractIngredients(url);
         const id = uuid();

@@ -63,7 +63,7 @@ export const getRecipes = async (req: Request, res: Response) => {
         `)
         const recipes = recipesQuery.rows;
         const recipesWithIngredients = recipes.map(recipe => {
-            const ingredients = [...new Set([...recipe.ingredients.map(e => e.toLowerCase()), ...recipe.possible_ingredients.map(e => e.toLowerCase())])];
+            const ingredients = [...new Set<string>([...recipe.ingredients.map((e: string) => e.toLowerCase()), ...recipe.possible_ingredients.map((e: string) => e.toLowerCase())])];
             return {
                 id: recipe.id,
                 url: recipe.url,

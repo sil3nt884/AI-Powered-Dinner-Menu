@@ -10,7 +10,7 @@ import cors from 'cors';
 import { addDinner } from "./routes/addDinner";
 import { dinners } from "./routes/dinners";
 import { whatsapp } from "./routes/whatsapp";
-import {allowedIpAddress} from "./routes/ipAddress";
+import { allowedIpAddress } from "./routes/ipAddress";
 
 const app = express();
 
