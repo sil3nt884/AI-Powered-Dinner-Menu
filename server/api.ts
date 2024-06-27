@@ -12,6 +12,7 @@ import { dinners } from "./routes/dinners";
 import { whatsapp } from "./routes/whatsapp";
 import { allowedIpAddress } from "./routes/ipAddress";
 
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -29,8 +30,9 @@ app.get('/dinners', dinners);
 app.get('/whatsapp', whatsapp);
 
 app.listen(PORT, async () => {
-    await connect();
     console.log('Server is running');
+    await connect();
+
 });
 
 process.on('SIGINT', async () => {

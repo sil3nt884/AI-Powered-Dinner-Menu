@@ -2,8 +2,13 @@ import { Request, Response } from "express";
 import * as jose from 'jose'
 const SECERT_HEADER = process.env.SECRET_HEADER ?? undefined
 const jwtKey = process.env.JWT_KEY ?? undefined
+const devMode = process.env.dev ?? undefined
 import {  createSecretKey } from 'crypto';
 export const allowedIpAddress = () => async (req: Request, res: Response, next: () => void) => {
+
+    if(devMode) {
+        return next();
+    }
 
     const clientCertEncoded = req.header('jwt');
     if(!clientCertEncoded){

@@ -4,6 +4,14 @@ import z from 'zod';
 import {v4 as uuid} from 'uuid';
 import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
 import ollama from "ollama";
+import { redisClient } from "../redis";
+import {RedisCommandArgument } from "@redis/client/dist/lib/commands";
+import {commandOptions} from "redis";
+
+
+
+
+
 export const extractIngredients = async (text: string): Promise<string[] | undefined> => {
     try {
         const response = await ollama.generate({
@@ -30,6 +38,20 @@ const RecipeSchema = z.object({
 });
 
 export type Recipe = z.infer<typeof RecipeSchema>;
+
+const createRecipe =  async (recipe: Recipe) => {
+    await addRecipe(recipe);
+    await generateRecipe();
+}
+
+const redisTasks = {
+    createRecipe
+}
+
+
+
+
+
 export const addRecipe = async (recipe: Recipe): Promise<void> => {
     const {name, url, owner} = recipe;
     const id = uuid();
@@ -37,13 +59,39 @@ export const addRecipe = async (recipe: Recipe): Promise<void> => {
                  VALUES ($1, $2, $3, $4, $5)`;
     await client.query(sql, [id, name, url, owner, Date.now()]);
 }
+
+
+const enqueueTask = async ({ task,args }: { task: any, args: string }) => {
+    const redis = await redisClient().getClient();
+    const payload  = JSON.stringify({taskName: task, args});
+    const key: RedisCommandArgument = 'tasks';
+    const element: RedisCommandArgument = payload;
+    await redis.rPush(key, element);
+}
+
+
+
+
+
+
+export const handleTask = async () => {
+    const redis = await redisClient().getClient();
+    const results = await redis.blPop(commandOptions({ isolated: true }),'tasks', 0)
+    const { element } = results;
+    const task = JSON.parse(element);
+    const taskName = task.taskName;
+    const args = task.args;
+    await redisTasks[taskName](JSON.parse(args));
+}
+
+
 export const handleAddRecipe = async (req: Request, res: Response) => {
     const recipeBody = req.body
     try {
         const recipe = RecipeSchema.parse(recipeBody);
-        await addRecipe(recipe);
-        await generateRecipe();
-        res.status(200).send({ message: "Recipe added"});
+        await enqueueTask({ task:'createRecipe', args:JSON.stringify(recipe)});
+        handleTask();
+        res.status(202).send({ message: "Recipe added"});
     } catch (e) {
         console.error(e);
         res.status(500).send({ message: "Error adding recipe" });
