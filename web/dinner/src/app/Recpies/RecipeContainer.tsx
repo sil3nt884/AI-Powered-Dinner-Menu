@@ -5,7 +5,7 @@ import './Recpies.css'
 export default async function RecipeContainer() {
     const getRecipesEndpoint = process.env.GET_RECIPES_ENDPOINT ?? ''
     const fetchRecipe = async () => {
-        const res = await fetch(getRecipesEndpoint, { cache: 'no-store' })
+        const res = await fetch(getRecipesEndpoint, { next: { revalidate: 300 } })
         return await res.json()
 
     }

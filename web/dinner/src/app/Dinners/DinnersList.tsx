@@ -7,7 +7,7 @@ export default  async  function DinnersList() {
 
     const endpoint = process.env.DINNERS_ENDPOINT ?? '';
 
-    const data: Dinner[]  = await (await fetch(endpoint, { cache: 'no-store' })).json();
+    const data: Dinner[]  = await (await fetch(endpoint, { next: { revalidate: 60 } })).json();
 
     if(!data) {
         return <h1> No Dinners </h1>
