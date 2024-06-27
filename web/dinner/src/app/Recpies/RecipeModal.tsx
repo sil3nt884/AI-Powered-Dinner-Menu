@@ -41,7 +41,7 @@ export default function RecipeModal({recipe, isOpen}:  {recipe: RecipeData,  isO
                                     const queryParam = params.get('query');
                                     return (
                                         <li key={index} className="underline text-blue-500">
-                                            <a  rel={'noreferrer'} onClick={(e) => e.stopPropagation()}href={url.toString()}>{queryParam}</a>
+                                            <a  rel={'noreferrer'} onClick={(e) => e.stopPropagation()}href={url.toString()}>{queryParam} target={"_blank"}</a>
                                         </li>
                                     )}
                                 )}
