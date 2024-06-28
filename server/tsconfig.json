@@ -5,7 +5,7 @@
     "strict": true,
     "noEmit": false,
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./",
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -16,6 +16,6 @@
     "incremental": true
 
   },
+  "include": ["./routes/*.ts", "api.ts", "redis.ts", "pg.ts", "HtmlPasrer.ts" ],
   "exclude": ["node_modules", "../web/dinner/**", "dist"],
-
 }

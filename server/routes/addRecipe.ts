@@ -31,8 +31,12 @@ export const extractIngredients = async (text: string): Promise<string[] | undef
 const RecipeSchema = z.object({
     id: z.string().optional(),
     name: z.string(),
-    url: z.string(),
-    owner: z.string(),
+    url: z.string().url(),
+    owner: z.union([
+        z.literal('Jacob'),
+        z.literal('Ricky'),
+        z.literal('Leo'),
+    ]),
     created_at: z.string().optional(),
 
 });

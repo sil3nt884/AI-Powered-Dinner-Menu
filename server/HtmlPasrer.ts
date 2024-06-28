@@ -19,8 +19,6 @@ export const parseHtml = (html: string): string => {
     text = text.replace(/\s+/g, ' ').trim();
     text = text.replace(/[^\w\s.,?!]/g, ' ');
     text = text.replace(/\s+/g, ' ').trim();
-
-    console.log(text);
     return text;
 };
 
@@ -36,6 +34,7 @@ export const bestEffortExtractIngredients = async (url: string): Promise<string[
     const ingredientsRegexp = ingredientsList.map((ingredient) => {
         return new RegExp(`\\b${ingredient.name}\\b`, 'gi');
     });
+
 
     const words = text.split(' ');
     return words.filter(word =>
