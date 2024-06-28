@@ -73,7 +73,6 @@ export const getRecipes = async (req: Request, res: Response) => {
                 searchQueries: ingredients.map(ingredient => `${new URL(`https://www.tesco.com/groceries/en-GB/search?query=${ingredient}`).toString()}`),
             }
         });
-
         res.status(200).send(recipesWithIngredients);
     } catch (e) {
         console.error(e);

@@ -17,8 +17,9 @@ export const extractIngredients = async (text: string): Promise<string[] | undef
         const response = await ollama.generate({
             model: 'llama3',
             format: 'json',
-            prompt: `extract ingredients from given text ${text} reply with only the extracted ingredients response should be a JSON`,
+            prompt: `extract ingredients from given text ${text} reply with only the extracted ingredients response should be a JSON object with the key "ingredients" and the value being an array of strings`,
         });
+        console.log('Extracted ingredients json', response);
         const jsonResponse = JSON.parse(response.response)
         const ingredientsKey = Object.keys(jsonResponse)[0]
         return jsonResponse[ingredientsKey];
@@ -85,7 +86,9 @@ export const handleTask = async () => {
     const task = JSON.parse(element);
     const taskName = task.taskName;
     const args = task.args;
+    console.log('Handling task', taskName);
     await redisTasks[taskName](JSON.parse(args));
+    console.log('Task handled', taskName);
 }
 
 
@@ -94,6 +97,7 @@ export const handleAddRecipe = async (req: Request, res: Response) => {
     try {
         const recipe = RecipeSchema.parse(recipeBody);
         await enqueueTask({ task:'createRecipe', args:JSON.stringify(recipe)});
+        console.log('Recipe added', recipe.name);
         handleTask();
         res.status(202).send({ message: "Recipe added"});
     } catch (e) {
@@ -120,35 +124,42 @@ const cleanExtractedIngredients = async (extractedIngredients: string[], cleaned
 };
 
 const generateRecipe = async () => {
-    const lastAddedRecipeQuery = await client.query('SELECT * FROM recipes ORDER BY created_date DESC LIMIT 1');
-    const lastAddedRecipe: Recipe = lastAddedRecipeQuery.rows[0];
-    const url = lastAddedRecipe.url;
-    const text = await getTextFromHtml(url)
-    const ingredients = await extractIngredients(text);
-    if(Array.isArray(ingredients)) {
-        const removeSymbols = ingredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length ?? 0 > 0);
+    try {
+        const lastAddedRecipeQuery = await client.query('SELECT * FROM recipes ORDER BY created_date DESC LIMIT 1');
+        console.log('Selected Recipe', lastAddedRecipeQuery);
+        const lastAddedRecipe: Recipe = lastAddedRecipeQuery.rows[0];
+        const url = lastAddedRecipe.url;
+        const text = await getTextFromHtml(url)
+        const ingredients = await extractIngredients(text);
+        console.log('Extracted ingredients', ingredients);
+        if (Array.isArray(ingredients)) {
+            const removeSymbols = ingredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length ?? 0 > 0);
 
-        const ingredientsListQuery = await client.query('SELECT * FROM ingredients');
-        const ingredientsList = ingredientsListQuery.rows;
-        const cleanedIngredientsRegexp = ingredientsList.map((ingredient) => {
-            return new RegExp(ingredient.name, 'gi');
-        });
-        const cleanedIngredients = await cleanExtractedIngredients(removeSymbols, cleanedIngredientsRegexp);
-        const removeSymbolsIng = cleanedIngredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length ?? 0 > 0);
-        const uniqueIngredients = [...new Set(removeSymbolsIng)];
-        const bestEffortExtractIngredientsList = await bestEffortExtractIngredients(url);
-        const id = uuid();
-        await client.query(`INSERT INTO generated_recipes (id, name, ingredients, recipe_id, uncleaned_ingredients,
-                                                           best_effort_ingredients)
-                            VALUES ($1, $2, $3, $4, $5, $6)`,
-            [
-                id,
-                lastAddedRecipe.name,
-                uniqueIngredients,
-                lastAddedRecipe.id,
-                removeSymbols,
-                bestEffortExtractIngredientsList
-            ]);
-        console.log('Recipe generated', lastAddedRecipe.name);
+            const ingredientsListQuery = await client.query('SELECT * FROM ingredients');
+            const ingredientsList = ingredientsListQuery.rows;
+            const cleanedIngredientsRegexp = ingredientsList.map((ingredient) => {
+                return new RegExp(ingredient.name, 'gi');
+            });
+            const cleanedIngredients = await cleanExtractedIngredients(removeSymbols, cleanedIngredientsRegexp);
+            const removeSymbolsIng = cleanedIngredients.filter((ingredient: string) => ingredient.match(/\w+/)?.length ?? 0 > 0);
+            const uniqueIngredients = [...new Set(removeSymbolsIng)];
+            const bestEffortExtractIngredientsList = await bestEffortExtractIngredients(url);
+            const id = uuid();
+            await client.query(`INSERT INTO generated_recipes (id, name, ingredients, recipe_id, uncleaned_ingredients,
+                                                               best_effort_ingredients)
+                                VALUES ($1, $2, $3, $4, $5, $6)`,
+                [
+                    id,
+                    lastAddedRecipe.name,
+                    uniqueIngredients,
+                    lastAddedRecipe.id,
+                    removeSymbols,
+                    bestEffortExtractIngredientsList
+                ]);
+            console.log('Recipe generated', lastAddedRecipe.name);
+        }
+    } catch (e) {
+        console.log('Failed to generate recipe', e);
     }
 }
+

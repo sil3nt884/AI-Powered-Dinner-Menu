@@ -24,6 +24,7 @@ export const parseHtml = (html: string): string => {
 
 export const fetchHtml = async (url: string): Promise<string> => {
     const response = await fetch(url);
+    console.log('feteched html', url, response.status);
     return await response.text();
 }
 

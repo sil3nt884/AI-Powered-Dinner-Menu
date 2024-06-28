@@ -8,7 +8,7 @@ const IngredientSchema = z.object({
     name: z.string(),
 });
 
-type Ingredient = z.infer<typeof IngredientSchema>;
+
 export const addIngredient = async (req: Request, res: Response): Promise<void> => {
     try{
         const ingredient = req.body
