@@ -37,6 +37,7 @@ const RecipeSchema = z.object({
         z.literal('Jacob'),
         z.literal('Ricky'),
         z.literal('Leo'),
+        z.literal('Chlöe'),
     ]),
     created_at: z.string().optional(),
 
