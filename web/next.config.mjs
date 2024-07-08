@@ -21,8 +21,8 @@ const nextConfig = withPWA({
     env: {
         ADD_RECIPE_ENDPOINT: 'https://homeluu.ddns.net/addRecipes',
         ADD_INGREDIENT_ENDPOINT: 'https://homeluu.ddns.net/addIngredient',
-        DINNERS_ENDPOINT:  'https://localhost:3000/dinners',
-        GET_RECIPES_ENDPOINT: 'https://localhost:3000/getRecipes',
+        DINNERS_ENDPOINT:  'https://localhost:4000/dinners',
+        GET_RECIPES_ENDPOINT: 'https://localhost:4000/getRecipes',
         ADD_DINNER_ENDPOINT: 'https://homeluu.ddns.net/addDinner',
     }
 });
