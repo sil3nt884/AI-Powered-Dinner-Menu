@@ -2,3 +2,5 @@
 /server/.env
 .idea/
 AI-Powered-Dinner-Menu.iml
+/server/private.key
+/server/dist/

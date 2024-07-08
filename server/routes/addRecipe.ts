@@ -6,7 +6,8 @@ import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
 import ollama from "ollama";
 import { redisClient } from "../redis";
 import {RedisCommandArgument } from "@redis/client/dist/lib/commands";
-import {commandOptions} from "redis";
+import { commandOptions } from "redis";
+
 
 
 
@@ -50,7 +51,7 @@ const createRecipe =  async (recipe: Recipe) => {
     await generateRecipe();
 }
 
-const redisTasks = {
+export const redisTasks = {
     createRecipe
 }
 
@@ -80,6 +81,7 @@ const enqueueTask = async ({ task,args }: { task: any, args: string }) => {
 
 
 
+
 export const handleTask = async () => {
     const redis = await redisClient().getClient();
     const results = await redis.blPop(commandOptions({ isolated: true }),'tasks', 0)
@@ -93,13 +95,15 @@ export const handleTask = async () => {
 }
 
 
+
+
+
 export const handleAddRecipe = async (req: Request, res: Response) => {
     const recipeBody = req.body
     try {
         const recipe = RecipeSchema.parse(recipeBody);
         await enqueueTask({ task:'createRecipe', args:JSON.stringify(recipe)});
         console.log('Recipe added', recipe.name);
-        handleTask();
         res.status(202).send({ message: "Recipe added"});
     } catch (e) {
         console.error(e);
@@ -163,4 +167,5 @@ const generateRecipe = async () => {
         console.log('Failed to generate recipe', e);
     }
 }
+
 

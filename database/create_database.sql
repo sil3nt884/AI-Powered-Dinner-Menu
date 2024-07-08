@@ -35,6 +35,15 @@ WHERE DATE(wr.date) >= (date_trunc('week', current_date) - INTERVAL '1 day')
   AND DATE(wr.date) < (date_trunc('week', current_date) + INTERVAL '7 days');
 
 
+
+CREATE TABLE pushSubscription (
+    id SERIAL PRIMARY KEY,
+    endpoint TEXT NOT NULL,
+    expirationTime TIMESTAMP,
+    keys JSONB NOT NULL
+);
+
+
 CREATE INDEX idx_recipes_name ON recipes(name);
 CREATE INDEX idx_generated_recipes_recipe_id ON generated_recipes(recipe_id);
 CREATE INDEX idx_weekly_dinner_date ON weekly_dinner(date);

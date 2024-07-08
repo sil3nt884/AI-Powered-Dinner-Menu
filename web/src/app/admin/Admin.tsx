@@ -1,7 +1,6 @@
 'use client'
 import { Button } from "@mui/material";
 import './admin.css'
-import {addRecipe} from "../../../../../server/routes/addRecipe";
 import {useState} from "react";
 export default function Admin() {
 
@@ -37,6 +36,44 @@ export default function Admin() {
         }
     }
 
+    // Helper function to convert VAPID key
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    const subscribeUser = async (swRegistration) => {
+        const vapidPublicKey = 'BAmtk2HxWuRLjUDRUAr4p7Aql97RmWsSHUuSWcvisxPNbibHyqKI9TSH6dly-wcCGyAwdYtPmXe7L-XY_c3lA7U'; // The public key generated in your Node.js server
+        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+        const subscription = await swRegistration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertedVapidKey
+        });
+
+        await fetch('/subscribe', {
+            method: 'POST',
+            body: JSON.stringify(subscription),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    };
+
+    const requestNotificationPermission = async () => {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            const swRegistration = await navigator.serviceWorker.ready;
+            await subscribeUser(swRegistration);
+        }
+    };
+
     const addIngredient = async () => {
         setIsAddingIngredient(true);
         try {
@@ -59,6 +96,8 @@ export default function Admin() {
             setIsAddingIngredient(false); // Set it to false whether our request resolves or rejects
         }
     }
+
+
 
 
     return (
@@ -105,7 +144,9 @@ export default function Admin() {
                     value={recipe.owner}
                     onChange={(e) => setRecipe({...recipe, owner: e.target.value})}
                 />
-                <Button  disabled={isAddingRecipe} onClick={addRecipe} variant="contained">Add Recipe</Button>
+                <Button disabled={isAddingRecipe} onClick={addRecipe} variant="contained">Add Recipe</Button>
+                <Button variant="contained" onClick={requestNotificationPermission}>Enable Notifications</Button>
+
             </div>
         </div>
 
