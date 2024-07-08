@@ -23,6 +23,7 @@ if (isMainThread) {
      new Worker(__filename);
      console.log("Worker started")
 
+    console.log(keys)
     webPush.setVapidDetails(
     'mailto:your-email@example.com',
         keys.pulbic,
