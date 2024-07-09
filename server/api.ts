@@ -19,15 +19,6 @@ import {handleSubscription} from "./routes/push";
 
 
 
-async function runTasks() {
-    while (true) {
-        try {
-            await handleTask();
-        } catch (e) {
-            console.error(e);
-        }
-    }
-}
 
 
 if (isMainThread) {
@@ -89,5 +80,25 @@ if (isMainThread) {
     console.log("http://localhost:3000/dinners")
     console.log("http://localhost:3000/whatsapp")
 } else {
-    runTasks();
+   const promiseWithTimeout =  (promise, timeout) => {
+        return Promise.race([
+            promise,
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Promise timed out')), timeout)
+            )
+        ]);
+    }
+
+   const run = async () => {
+        while (true) {
+            try {
+                const twoMinutes = 1000 * 60 * 2;
+                await promiseWithTimeout(handleTask(), twoMinutes);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+    }
+    run();
 }

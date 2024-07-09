@@ -27,39 +27,23 @@ export const sendPushNotifications = async () => {
 
 }
 
-function promiseRace<T>(promise: Promise<T>, ms: number): Promise<T> {
-        return new Promise<T>((resolve, reject) => {
-                const timeoutId = setTimeout(() => {
-                        reject(new Error(`Promise timed out after ${ms} milliseconds`));
-                }, ms);
-
-                promise.then(
-                    (value) => {
-                            clearTimeout(timeoutId);
-                            resolve(value);
-                    },
-                    (error) => {
-                            clearTimeout(timeoutId);
-                            reject(error);
-                    }
-                );
-        });
+function promiseWithTimeout(promise, timeout) {
+        return Promise.race([
+                promise,
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Promise timed out')), timeout)
+                )
+        ]);
 }
 export const handleTask = async () => {
         const redis = await redisClient().getClient();
-
-        if (!redis.isOpen) { return }
-
-        const results = await promiseRace<any>(redis.blPop(commandOptions({ isolated: true }), 'tasks', 0), 2000)
-
-        if (!results) { return }
-
+        const results = await redis.blPop(commandOptions({ isolated: true }),'tasks', 0)
         const { element } = results;
         const task = JSON.parse(element);
         const taskName = task.taskName;
         const args = task.args;
 
-
+        console.log('Task', taskName, args)
         parentPort?.postMessage({
                 event: 'task-started',
                 task: taskName,
