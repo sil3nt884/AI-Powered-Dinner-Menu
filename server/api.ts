@@ -19,7 +19,15 @@ import {handleSubscription} from "./routes/push";
 
 
 
-
+async function runTasks() {
+    while (true) {
+        try {
+            await handleTask();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
 
 
 if (isMainThread) {
@@ -81,12 +89,5 @@ if (isMainThread) {
     console.log("http://localhost:3000/dinners")
     console.log("http://localhost:3000/whatsapp")
 } else {
-    setInterval(async () => {
-        try {
-            await handleTask();
-        }
-        catch (e) {
-            console.error(e);
-        }
-    }, 1000);
+    runTasks();
 }
