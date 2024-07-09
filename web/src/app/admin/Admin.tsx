@@ -2,6 +2,7 @@
 import { Button } from "@mui/material";
 import './admin.css'
 import {useState} from "react";
+import PushNotificationComponent from "@/app/push/toaser";
 export default function Admin() {
 
     const [ingredient, setIngredient] = useState({ name: "" });
@@ -146,7 +147,7 @@ export default function Admin() {
                 />
                 <Button disabled={isAddingRecipe} onClick={addRecipe} variant="contained">Add Recipe</Button>
                 <Button variant="contained" onClick={requestNotificationPermission}>Enable Notifications</Button>
-
+                <PushNotificationComponent></PushNotificationComponent>
             </div>
         </div>
 

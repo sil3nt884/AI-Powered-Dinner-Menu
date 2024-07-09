@@ -3,4 +3,6 @@ self.addEventListener('push', function(event) {
     self.registration.showNotification(data.title, {
         body: data.body,
     });
+
+    
 });
