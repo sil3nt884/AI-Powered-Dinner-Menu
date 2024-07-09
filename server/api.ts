@@ -82,6 +82,11 @@ if (isMainThread) {
     console.log("http://localhost:3000/whatsapp")
 } else {
     setInterval(async () => {
-        await handleTask();
+        try {
+            await handleTask();
+        }
+        catch (e) {
+            console.error(e);
+        }
     }, 1000);
 }
