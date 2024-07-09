@@ -6,7 +6,7 @@ import { bestEffortExtractIngredients,  getTextFromHtml} from "../HtmlPasrer";
 import ollama from "ollama";
 import { redisClient } from "../redis";
 import {RedisCommandArgument } from "@redis/client/dist/lib/commands";
-import { commandOptions } from "redis";
+
 
 
 
@@ -47,8 +47,16 @@ const RecipeSchema = z.object({
 export type Recipe = z.infer<typeof RecipeSchema>;
 
 const createRecipe =  async (recipe: Recipe) => {
-    await addRecipe(recipe);
-    await generateRecipe();
+    try {
+        console.log('Creating recipe', recipe.name)
+        await addRecipe(recipe);
+        await generateRecipe();
+        console.log('Recipe created', recipe.name)
+    }
+    catch (e) {
+        console.error(e);
+    }
+
 }
 
 export const redisTasks = {
@@ -64,7 +72,15 @@ export const addRecipe = async (recipe: Recipe): Promise<void> => {
     const id = uuid();
     const sql = `INSERT INTO recipes (id, name, url, owner ,created_date)
                  VALUES ($1, $2, $3, $4, $5)`;
-    await client.query(sql, [id, name, url, owner, Date.now()]);
+    console.log("attempting to add recpie", recipe.name, client);
+    try {
+        await client.query(sql, [id, name, url, owner, Date.now()]);
+    }
+    catch (e) {
+        console.error(e);
+        throw e
+    }
+    console.log("added new recipe", recipe.name);
 }
 
 
@@ -75,26 +91,6 @@ const enqueueTask = async ({ task,args }: { task: any, args: string }) => {
     const element: RedisCommandArgument = payload;
     await redis.rPush(key, element);
 }
-
-
-
-
-
-
-
-export const handleTask = async () => {
-    const redis = await redisClient().getClient();
-    const results = await redis.blPop(commandOptions({ isolated: true }),'tasks', 0)
-    const { element } = results;
-    const task = JSON.parse(element);
-    const taskName = task.taskName;
-    const args = task.args;
-    console.log('Handling task', taskName);
-    await redisTasks[taskName](JSON.parse(args));
-    console.log('Task handled', taskName);
-}
-
-
 
 
 

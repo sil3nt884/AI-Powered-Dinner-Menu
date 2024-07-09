@@ -2,7 +2,7 @@ import dotenv  from 'dotenv';
 dotenv.config();
 import express from 'express'
 import { connect, disconnect } from "./pg";
-import { handleAddRecipe } from "./routes/addRecipe";
+import {handleAddRecipe, redisTasks} from "./routes/addRecipe";
 import  bodyParser  from 'body-parser';
 import { getRecipes } from "./routes/getRecipes";
 import { addIngredient } from "./routes/addIngredients";
@@ -11,17 +11,30 @@ import { addDinner } from "./routes/addDinner";
 import { dinners } from "./routes/dinners";
 import { whatsapp } from "./routes/whatsapp";
 import { allowedIpAddress } from "./routes/ipAddress";
-import { Worker, isMainThread } from 'node:worker_threads';
-import { handleTask } from "./routes/workerTask";
+import { Worker, isMainThread, parentPort } from 'node:worker_threads';
+import {handleTask, sendPushNotifications} from "./routes/workerTask";
 import webPush from 'web-push';
 import { keys } from './keys';
 import {handleSubscription} from "./routes/push";
 
 
 
+
+
+
 if (isMainThread) {
-     new Worker(__filename);
-     console.log("Worker started")
+     const worker=  new Worker(__filename);
+
+    worker.on('message', async (message) => {
+        const { event, task, payload } = message;
+        console.log('Message received', message);
+        if (event === 'task-started') {
+            console.log('Task started', task, payload);
+            await redisTasks[task](JSON.parse(payload));
+            await sendPushNotifications()
+        }
+    })
+
 
     console.log(keys)
     webPush.setVapidDetails(
@@ -52,6 +65,7 @@ if (isMainThread) {
     app.listen(PORT, async () => {
         console.log('Server is running');
         await connect();
+        console.log('Connected to database');
 
     });
 

@@ -3,9 +3,10 @@ import { commandOptions } from "redis";
 import { redisTasks } from "./addRecipe";
 import { client } from '../pg';
 import webPush from "web-push";
+import { Worker, isMainThread, parentPort } from 'node:worker_threads';
 
 
-const sendPushNotifications = async () => {
+export const sendPushNotifications = async () => {
         try {
                 const subscriptionsResults = await client.query('SELECT * FROM pushsubscription');
                 const subscriptions = subscriptionsResults.rows;
@@ -19,7 +20,7 @@ const sendPushNotifications = async () => {
                 await Promise.all(
                     subscriptions.map(sub => webPush.sendNotification(sub, JSON.stringify(notificationPayload)))
                 )
-
+                console.log("Push notifications sent")
         }
         catch (e) {
                 console.error(e);
@@ -29,19 +30,19 @@ const sendPushNotifications = async () => {
 
 
 export const handleTask = async () => {
+
         const redis = await redisClient().getClient();
         const results = await redis.blPop(commandOptions({ isolated: true }),'tasks', 0)
         const { element } = results;
         const task = JSON.parse(element);
         const taskName = task.taskName;
-        if(!redisTasks[taskName]) {
-            console.log('Task not found', taskName);
-            return;
-        }
         const args = task.args;
-        await redisTasks[taskName](JSON.parse(args));
-        await sendPushNotifications();
-
+        console.log(parentPort)
+        parentPort?.postMessage({
+                event: 'task-started',
+                task: taskName,
+                payload: args
+        })
 }
 
 
