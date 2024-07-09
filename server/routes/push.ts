@@ -9,7 +9,7 @@ export const handleSubscription = async (req: Request, res: Response) => {
     try {
         const subscription = req.body;
         const {endpoint, expirationTime, keys} = subscription;
-        await client.query('INSERT INTO pushsubscriptions (endpoint, keys) VALUES ($1, $2, $3)', [endpoint, expirationTime, keys]);
+        await client.query('INSERT INTO pushsubscription (endpoint, keys) VALUES ($1, $2, $3)', [endpoint, expirationTime, keys]);
 
 
         res.status(201).json({});
