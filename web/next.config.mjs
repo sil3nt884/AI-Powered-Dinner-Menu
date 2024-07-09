@@ -1,10 +1,9 @@
 import  withPWAInit   from "@ducanh2912/next-pwa"
 
 const withPWA = withPWAInit({
-   dest: "public",
+    dest: "public",
     register: true,
-    customWorkerDir: 'src/service-worker',
-    customWorkerSrc: 'service-worker.js',
+    customWorkerDir: 'src/app/service-worker',
 
 });
 
