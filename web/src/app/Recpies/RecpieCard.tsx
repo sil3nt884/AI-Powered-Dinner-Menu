@@ -27,6 +27,9 @@ export default function RecipeCard(recipe:  RecipeData) {
             body
         })
         toast('Dinner Added');
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
     }
 
     return (
