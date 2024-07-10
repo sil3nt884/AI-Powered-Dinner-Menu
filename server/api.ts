@@ -96,7 +96,9 @@ if (isMainThread) {
                 await promiseWithTimeout(handleTask(), twoMinutes);
             }
             catch (e) {
-                console.error(e);
+                if(process.env.dev === 'development') {
+                    console.error(e);
+                }
             }
         }
     }

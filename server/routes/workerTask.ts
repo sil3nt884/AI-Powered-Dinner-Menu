@@ -27,14 +27,6 @@ export const sendPushNotifications = async () => {
 
 }
 
-function promiseWithTimeout(promise, timeout) {
-        return Promise.race([
-                promise,
-                new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Promise timed out')), timeout)
-                )
-        ]);
-}
 export const handleTask = async () => {
         const redis = await redisClient().getClient();
         const results = await redis.blPop(commandOptions({ isolated: true }),'tasks', 0)
