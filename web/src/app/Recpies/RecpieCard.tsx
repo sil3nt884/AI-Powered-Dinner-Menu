@@ -12,7 +12,7 @@ export default function RecipeCard(recipe:  RecipeData) {
 
     const handleCardClick = () => {
         setModalOpen(!isModalOpen);
-        toast('Dinner Added');
+
     }
     const handleButtonClick = async (event) => {
         event.stopPropagation();
@@ -26,6 +26,7 @@ export default function RecipeCard(recipe:  RecipeData) {
             },
             body
         })
+        toast('Dinner Added');
 
 
     }
