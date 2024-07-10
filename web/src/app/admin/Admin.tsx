@@ -30,7 +30,7 @@ export default function Admin() {
             }
 
             setRecipe({ name: "", url: "", owner: "" });
-            window.location.reload()
+
 
         } finally {
             setIsAddingRecipe(false);
