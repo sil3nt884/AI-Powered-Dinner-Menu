@@ -27,8 +27,7 @@ export default function RecipeCard(recipe:  RecipeData) {
             body
         })
         toast('Dinner Added');
-
-
+        window.location.reload()
     }
 
     return (
