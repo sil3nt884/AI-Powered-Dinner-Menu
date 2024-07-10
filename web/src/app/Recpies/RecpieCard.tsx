@@ -1,9 +1,9 @@
 'use client'
 import {Button, Card} from "@mui/material";
-import {RecipeData} from "../../../../../server/routes/getRecipes";
+import {RecipeData} from "../../../../server/routes/getRecipes";
 import { useState } from "react";
 import RecipeModal from "@/app/Recpies/RecipeModal";
-
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function RecipeCard(recipe:  RecipeData) {
 
@@ -12,6 +12,7 @@ export default function RecipeCard(recipe:  RecipeData) {
 
     const handleCardClick = () => {
         setModalOpen(!isModalOpen);
+        toast('Dinner Added');
     }
     const handleButtonClick = async (event) => {
         event.stopPropagation();
@@ -26,15 +27,20 @@ export default function RecipeCard(recipe:  RecipeData) {
             body
         })
 
+
     }
 
     return (
-        <Card className="flex justify-center items-center" onClick={handleCardClick}>
-            <h1>{recipe.name}</h1>
-            <a href={recipe.url}/>
-            <h2>{recipe.owner}</h2>
-            <Button  variant="contained" onClick={handleButtonClick}>Add To Dinners </Button>
-            {isModalOpen && <RecipeModal recipe={recipe} isOpen={isModalOpen} />}
-        </Card>
+        <>
+            <Card className="flex justify-center items-center" onClick={handleCardClick}>
+                <h1>{recipe.name}</h1>
+                <a href={recipe.url}/>
+                <h2>{recipe.owner}</h2>
+                <Button  variant="contained" onClick={handleButtonClick}>Add To Dinners </Button>
+                {isModalOpen && <RecipeModal recipe={recipe} isOpen={isModalOpen} />}
+            </Card>
+            <ToastContainer />
+        </>
+
     )
 }

@@ -5,12 +5,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const PushNotificationComponent = () => {
     useEffect(() => {
-        navigator.serviceWorker.addEventListener('message', event => {
-            if (event.data && event.data.type === 'PUSH_NOTIFICATION_RECEIVED') {
+            navigator.serviceWorker.addEventListener('push', event => {
+                const data = event.data.json();
                 toast(`${event.data.title}: ${event.data.body}`);
-            }
-        });
-    }, []);
+
+            });
+            return () => navigator.serviceWorker.removeEventListener('push', () => {
+            })
+        }, []);
 
     return (
         <div>

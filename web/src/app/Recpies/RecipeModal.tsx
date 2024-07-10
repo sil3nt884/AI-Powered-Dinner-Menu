@@ -1,5 +1,5 @@
 'use client'
-import {RecipeData} from "../../../../../server/routes/getRecipes";
+import {RecipeData} from "../../../../server/routes/getRecipes";
 import {useEffect, useState} from "react";
 
 
