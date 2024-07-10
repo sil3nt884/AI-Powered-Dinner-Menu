@@ -7,12 +7,11 @@ const PushNotificationComponent = () => {
     const broadcastChannel = new BroadcastChannel('messages');
 
     useEffect(() => {
-            broadcastChannel.addEventListener('message', (event) => {
-                toast(event.data.title);
-            });
+            broadcastChannel.onmessage = (event) => {
+            console.log('Main thread received message:', event.data);
+            toast(event.data.title);
+         };
 
-
-            return () => broadcastChannel.addEventListener('message',()=> {})
         }, []);
 
     return (
