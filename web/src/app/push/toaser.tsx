@@ -4,14 +4,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PushNotificationComponent = () => {
-    useEffect(() => {
-            navigator.serviceWorker.addEventListener('push', event => {
-                const data = event.data.json();
-                toast(`${event.data.title}: ${event.data.body}`);
+    const broadcastChannel = new BroadcastChannel('messages');
 
+    useEffect(() => {
+            broadcastChannel.addEventListener('message', (event) => {
+                toast(event.data.title);
             });
-            return () => navigator.serviceWorker.removeEventListener('push', () => {
-            })
+
+
+            return () => broadcastChannel.addEventListener('message',()=> {})
         }, []);
 
     return (
