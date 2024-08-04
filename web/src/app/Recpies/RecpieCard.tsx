@@ -34,7 +34,7 @@ export default function RecipeCard(recipe:  RecipeData) {
 
     return (
         <>
-            <Card className="flex justify-center items-center" onClick={handleCardClick}>
+            <Card className="flex justify-center items-center border-b-gray-950" onClick={handleCardClick}>
                 <h1>{recipe.name}</h1>
                 <a href={recipe.url}/>
                 <h2>{recipe.owner}</h2>

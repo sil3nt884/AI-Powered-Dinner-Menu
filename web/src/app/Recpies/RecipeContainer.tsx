@@ -1,6 +1,7 @@
-import RecipeCard from "@/app/Recpies/RecpieCard";
-import {RecipeData} from "../../../../../server/routes/getRecipes";
 import './Recpies.css'
+import SearchBar from "@/app/Search/Search";
+import RecipFilter from "@/app/Recpies/FilterRecpie";
+
 
 export default async function RecipeContainer() {
     const getRecipesEndpoint = process.env.GET_RECIPES_ENDPOINT ?? ''
@@ -15,13 +16,14 @@ export default async function RecipeContainer() {
         return <div>Loading...</div>
     }
     return (
-        <div  className="flex justify-center items-center">
-            {data.map((recipe: RecipeData, index) => {
-                return (<div className="recipe-container max-w-[220px]" key={index}>
-                        <RecipeCard {...recipe}/>
-                </div>)
-            })}
-        </div>
+        <>
+            <div className={'search'}>
+                <SearchBar data={data}/>
+            </div>
+            <div className="flex justify-center items-center">
+                <RecipFilter></RecipFilter>
+            </div>
+        </>
     )
 
 }

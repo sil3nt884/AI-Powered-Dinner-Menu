@@ -1,9 +1,10 @@
 'use client';
 import Admin from "@/app/admin/Admin";
 import {SyntheticEvent, useState } from "react";
-import { Box, Tab, Tabs } from "@mui/material";
-import DinnersListClient from "@/app/Dinners/DinnersListClient";
-
+import {Box, Tab, Tabs} from "@mui/material";
+import {
+    RecoilRoot,
+} from 'recoil';
 
 
 interface TabPanelProps {
@@ -30,6 +31,7 @@ function CustomTabPanel(props: TabPanelProps) {
 
 
 
+
 export default function HomePage(props) {
     const [value, setValue] = useState(0);
 
@@ -38,6 +40,7 @@ export default function HomePage(props) {
     };
 
     return (
+        <RecoilRoot>
             <section>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -56,5 +59,6 @@ export default function HomePage(props) {
                     {props.DinnerList}
                 </CustomTabPanel>
             </section>
+         </RecoilRoot>
     );
 }
