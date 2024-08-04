@@ -5,6 +5,5 @@
 .search{
     position: absolute;
     top: 10px;
-    padding-left: 54%;
-    pointer-events: none;
+    left: 54%
 }
