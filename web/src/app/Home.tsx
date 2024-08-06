@@ -1,38 +1,16 @@
 'use client';
-import Admin from "@/app/admin/Admin";
 import {SyntheticEvent, useState } from "react";
 import {Box, Tab, Tabs} from "@mui/material";
 import {
     RecoilRoot,
 } from 'recoil';
-
-
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
-    );
-}
+import AdminCustomTabPanel from "@/app/CustomTab/AdminCustomTab";
+import RecipeCustomTabPanel from "@/app/CustomTab/RecipeCustomPanel";
+import DinnerCustomTabPanel from "@/app/CustomTab/DinnerCustomPanel";
 
 
 
-
-export default function HomePage(props) {
+export default function HomePage({data, dinners}) {
     const [value, setValue] = useState(0);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -49,15 +27,9 @@ export default function HomePage(props) {
                         <Tab label="Dinners" />
                     </Tabs>
                 </Box>
-                <CustomTabPanel value={value} index={0}>
-                    <Admin />
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
-                    {props.children}
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                    {props.DinnerList}
-                </CustomTabPanel>
+                {value === 0 && <AdminCustomTabPanel />}
+                {value === 1 && <RecipeCustomTabPanel  data={data}/>}
+                {value === 2 && <DinnerCustomTabPanel  data={dinners}/>}
             </section>
          </RecoilRoot>
     );

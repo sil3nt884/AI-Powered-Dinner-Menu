@@ -3,6 +3,8 @@ import { Button } from "@mui/material";
 import './admin.css'
 import {useState} from "react";
 import PushNotificationComponent from "@/app/push/toaser";
+
+
 export default function Admin() {
 
     const [ingredient, setIngredient] = useState({ name: "" });

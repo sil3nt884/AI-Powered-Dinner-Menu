@@ -11,6 +11,7 @@ const withPWA = withPWAInit({
 /** @type {import('next').NextConfig} */
 const nextConfig = withPWA({
     poweredByHeader: false,
+    serverActions: true,
     eslint: {
         ignoreDuringBuilds: true,
     },
@@ -20,8 +21,8 @@ const nextConfig = withPWA({
     env: {
         ADD_RECIPE_ENDPOINT: 'https://homeluu.ddns.net/addRecipes',
         ADD_INGREDIENT_ENDPOINT: 'https://homeluu.ddns.net/addIngredient',
-        DINNERS_ENDPOINT:  'http://localhost:4000/dinners',
-        GET_RECIPES_ENDPOINT: 'http://localhost:4000/getRecipes',
+        DINNERS_ENDPOINT:  'http://localhost:8000/dinners',
+        GET_RECIPES_ENDPOINT: 'http://localhost:8000/getRecipes',
         ADD_DINNER_ENDPOINT: 'https://homeluu.ddns.net/addDinner',
     }
 });

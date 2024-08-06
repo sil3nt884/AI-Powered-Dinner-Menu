@@ -1,19 +1,9 @@
-'use server'
-type Dinner = {
-    name: string;
-    url: string;
-}
-export default  async  function DinnersList() {
+'use client'
 
-    const endpoint = process.env.DINNERS_ENDPOINT ?? '';
-
-    const data: Dinner[]  = await (await fetch(endpoint, { next: { revalidate: 60 } })).json();
-
-    if(!data) {
-        return <h1> No Dinners </h1>
-    }
-
+export default function DinnersList({data}) {
+        console.log(data)
     return (
+
         <div className="flex flex-col items-center justify-center min-h-screen">
             {data.map((dinner, index) => {
                 return (
